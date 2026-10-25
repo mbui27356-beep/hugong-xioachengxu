@@ -1,0 +1,34 @@
+<nav-bar title="消息" back="{{false}}" scrolled="{{scrolled}}" />
+
+<view class="page page-tab">
+  <view class="page-head head-row">
+    <view>
+      <view class="large-title">消息</view>
+      <view class="lead" wx:if="{{unread}}">{{unread}} 条未读</view>
+      <view class="lead" wx:else>全部已读</view>
+    </view>
+    <view wx:if="{{unread}}" class="link read-all" bindtap="readAll">全部已读</view>
+  </view>
+
+  <view wx:if="{{loading && !list.length}}" class="group">
+    <view wx:for="{{[1,2,3]}}" wx:key="*this" class="cell"><view style="flex:1;"><view class="skeleton" style="height:32rpx;width:50%;"></view><view class="skeleton" style="height:26rpx;width:90%;margin-top:16rpx;"></view></view></view>
+  </view>
+
+  <empty-state wx:elif="{{error}}" icon="alert" title="加载失败" desc="{{error}}" action-text="重试" bind:action="load" />
+
+  <empty-state wx:elif="{{!list.length}}" icon="bell" title="暂无消息" desc="预约进度、付款与护工安排会通知到这里。" />
+
+  <view wx:else class="group fade-in">
+    <view wx:for="{{list}}" wx:key="id" class="cell msg" hover-class="cell-hover" data-id="{{item.id}}" bindtap="open">
+      <view class="m-icon"><icon name="{{item.type === 'ORDER' ? 'orders' : 'info'}}" size="34" stroke="1.8" /><view wx:if="{{!item.readAt}}" class="unread"></view></view>
+      <view class="cell-main">
+        <view class="m-top">
+          <view class="m-title ellipsis {{item.readAt ? '' : 'm-strong'}}">{{item.title}}</view>
+          <view class="caption tertiary num" style="font-weight:400;flex-shrink:0;">{{item.when}}</view>
+        </view>
+        <view class="m-body">{{item.body}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="group-footer" wx:if="{{list.length}}">站内消息不包含健康详情。紧急事项请直接致电客服。</view>
+</view>

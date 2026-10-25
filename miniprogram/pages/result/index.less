@@ -1,0 +1,89 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 72rpx 64rpx 56rpx;
+  text-align: center;
+}
+
+.hero .lead {
+  margin-top: 16rpx;
+  font-size: 30rpx;
+  line-height: 46rpx;
+  color: var(--label-2);
+}
+
+.mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 144rpx;
+  height: 144rpx;
+  border-radius: 50%;
+  background: var(--label);
+  animation: pop 0.5s cubic-bezier(0.3, 1.4, 0.5, 1) both;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.copy {
+  display: flex;
+  padding: 12rpx;
+  margin-right: -12rpx;
+  border-radius: 50%;
+}
+
+.copy-hover {
+  background: var(--fill);
+}
+
+.next {
+  padding: 20rpx 32rpx;
+}
+
+.n-row {
+  position: relative;
+  display: flex;
+  gap: 24rpx;
+  padding: 16rpx 0;
+}
+
+.n-row + .n-row::before {
+  content: '';
+  position: absolute;
+  left: 9rpx;
+  top: -26rpx;
+  height: 44rpx;
+  border-left: 2rpx solid var(--sep);
+}
+
+.n-dot {
+  width: 20rpx;
+  height: 20rpx;
+  margin-top: 10rpx;
+  border-radius: 50%;
+  background: var(--label-4);
+  flex-shrink: 0;
+}
+
+.n-on {
+  background: var(--label);
+  box-shadow: 0 0 0 8rpx rgba(29, 29, 31, 0.08);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin: 56rpx 32rpx 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}

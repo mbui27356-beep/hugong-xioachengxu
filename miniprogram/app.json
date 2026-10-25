@@ -1,0 +1,46 @@
+{
+  "pages": [
+    "pages/hospitals/index",
+    "pages/orders/index",
+    "pages/messages/index",
+    "pages/location/index",
+    "pages/consent/index",
+    "pages/service/index",
+    "pages/patients/index",
+    "pages/patient-edit/index",
+    "pages/checkout/index",
+    "pages/result/index",
+    "pages/order-detail/index",
+    "pages/message-detail/index",
+    "pages/help/index",
+    "pages/agreement/index"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F5F5F7",
+    "backgroundColorTop": "#F5F5F7",
+    "backgroundColorBottom": "#F5F5F7",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#AEAEB2",
+    "selectedColor": "#1D1D1F",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/hospitals/index", "text": "预约陪护" },
+      { "pagePath": "pages/orders/index", "text": "订单" },
+      { "pagePath": "pages/messages/index", "text": "消息" }
+    ]
+  },
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/index",
+    "icon": "/components/icon/index",
+    "empty-state": "/components/empty-state/index"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,182 @@
+.status-line {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-warning { background: var(--warning); box-shadow: 0 0 0 8rpx var(--warning-soft); }
+.dot-accent { background: var(--accent); box-shadow: 0 0 0 8rpx var(--accent-soft); }
+.dot-indigo { background: var(--indigo); box-shadow: 0 0 0 8rpx var(--indigo-soft); }
+.dot-success { background: var(--success); box-shadow: 0 0 0 8rpx var(--success-soft); }
+.dot-neutral { background: var(--label-4); box-shadow: 0 0 0 8rpx var(--fill-2); }
+.dot-danger { background: var(--danger); box-shadow: 0 0 0 8rpx var(--danger-soft); }
+
+.progress {
+  position: relative;
+  padding: 40rpx 32rpx 32rpx;
+}
+
+.track {
+  position: absolute;
+  top: 50rpx;
+  left: 72rpx;
+  right: 72rpx;
+  height: 4rpx;
+  border-radius: 4rpx;
+  background: var(--fill);
+}
+
+.track-fill {
+  height: 100%;
+  border-radius: 4rpx;
+  background: var(--label);
+  transition: width 0.5s var(--ease);
+}
+
+.p-steps {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+
+.p-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80rpx;
+}
+
+.p-dot {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: inset 0 0 0 4rpx var(--label-4);
+}
+
+.p-done .p-dot {
+  background: var(--label);
+  box-shadow: none;
+}
+
+.p-cur .p-dot {
+  background: var(--label);
+  box-shadow: 0 0 0 8rpx rgba(29, 29, 31, 0.1);
+}
+
+.p-label {
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  color: var(--label-3);
+  white-space: nowrap;
+}
+
+.p-done .p-label,
+.p-cur .p-label {
+  color: var(--label);
+  font-weight: 600;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: var(--success-soft);
+  color: var(--success);
+  font-size: 26rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.round-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: var(--success-soft);
+}
+
+.pk-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+  margin-top: 20rpx;
+}
+
+.pk-li {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  font-size: 28rpx;
+}
+
+.pk-ex {
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid var(--sep);
+}
+
+.timeline {
+  padding: 28rpx 32rpx;
+}
+
+.t-row {
+  position: relative;
+  display: flex;
+  gap: 24rpx;
+  padding-bottom: 32rpx;
+}
+
+.t-row:last-child {
+  padding-bottom: 0;
+}
+
+.t-row::before {
+  content: '';
+  position: absolute;
+  left: 9rpx;
+  top: 28rpx;
+  bottom: 0;
+  border-left: 2rpx solid var(--sep);
+}
+
+.t-row:last-child::before {
+  display: none;
+}
+
+.t-dot {
+  width: 20rpx;
+  height: 20rpx;
+  margin-top: 10rpx;
+  border-radius: 50%;
+  background: var(--label-4);
+  flex-shrink: 0;
+}
+
+.t-first .t-dot {
+  background: var(--label);
+  box-shadow: 0 0 0 8rpx rgba(29, 29, 31, 0.08);
+}
+
+.t-main {
+  flex: 1;
+}
+
+.demo {
+  margin: 56rpx 32rpx 0;
+  padding: 32rpx;
+  border-radius: var(--r-card);
+  border: 2rpx dashed rgba(0, 0, 0, 0.12);
+}

@@ -1,0 +1,18 @@
+<nav-bar title="{{doc.title}}" scrolled="{{scrolled}}" />
+
+<view class="page">
+  <empty-state wx:if="{{error}}" icon="alert" title="暂时无法加载" desc="{{error}}" />
+  <block wx:elif="{{doc.id}}">
+    <view class="page-head">
+      <view class="title-2">{{doc.title}}</view>
+      <view class="footnote tertiary" style="margin-top:12rpx;">第 {{doc.version}} 版 · {{published}} 发布</view>
+    </view>
+    <view class="card doc">
+      <view wx:for="{{doc.sections}}" wx:key="heading" class="doc-sec">
+        <view wx:if="{{item.heading}}" class="doc-h">{{item.heading}}</view>
+        <view class="doc-p">{{item.body}}</view>
+      </view>
+    </view>
+    <view class="group-footer">内容摘要：{{doc.contentHash}}</view>
+  </block>
+</view>

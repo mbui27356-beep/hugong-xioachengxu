@@ -1,0 +1,134 @@
+.nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+}
+
+.nav-btn-hover {
+  background: var(--fill);
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  height: 80rpx;
+  margin: 8rpx 32rpx 0;
+  padding: 0 24rpx;
+  border-radius: 24rpx;
+  background: var(--fill);
+}
+
+.search-input {
+  flex: 1;
+  height: 80rpx;
+  font-size: 32rpx;
+}
+
+.search-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background: var(--label-4);
+}
+
+.chips-scroll {
+  margin-top: 28rpx;
+  width: 100%;
+}
+
+.grade-row {
+  margin: 20rpx 32rpx 0;
+}
+
+.h-card {
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+  padding: 32rpx;
+  transition: transform 0.2s var(--ease);
+}
+
+.pressed-card {
+  transform: scale(0.985);
+  background: #fbfbfd;
+}
+
+.h-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 24rpx;
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
+.h-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.h-name {
+  font-size: 34rpx;
+  line-height: 46rpx;
+  font-weight: 600;
+  letter-spacing: -0.3rpx;
+}
+
+.h-meta {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  margin-top: 10rpx;
+}
+
+.h-foot {
+  margin-top: 8rpx;
+}
+
+.list-end {
+  padding: 32rpx 0 0;
+  text-align: center;
+}
+
+.steps {
+  padding: 12rpx 32rpx;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+  padding: 24rpx 0;
+}
+
+.step + .step {
+  border-top: 1rpx solid var(--sep);
+}
+
+.step-no {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48rpx;
+  height: 48rpx;
+  margin-top: 2rpx;
+  border-radius: 50%;
+  background: var(--label);
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.step-main {
+  flex: 1;
+}

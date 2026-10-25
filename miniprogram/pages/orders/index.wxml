@@ -1,0 +1,58 @@
+<nav-bar title="订单" back="{{false}}" scrolled="{{scrolled}}" />
+
+<view class="page page-tab">
+  <view class="page-head head-row">
+    <view class="large-title">订单</view>
+    <picker range="{{patientNames}}" value="{{patientIndex}}" bindchange="pickPatient">
+      <view class="filter" hover-class="pressed">
+        <text>{{patientNames[patientIndex]}}</text>
+        <icon name="chevron-down" size="26" stroke="2.2" />
+      </view>
+    </picker>
+  </view>
+
+  <scroll-view scroll-x enhanced show-scrollbar="{{false}}" scroll-into-view="tab-{{tab}}" scroll-with-animation class="tabs">
+    <view class="chips">
+      <view wx:for="{{tabs}}" wx:key="key" id="tab-{{item.key}}" class="chip {{tab === item.key ? 'chip-on' : ''}}" data-key="{{item.key}}" bindtap="pickTab">{{item.label}}</view>
+    </view>
+  </scroll-view>
+
+  <view class="list">
+    <block wx:if="{{loading && !list.length}}">
+      <view wx:for="{{[1,2]}}" wx:key="*this" class="card">
+        <view class="skeleton" style="height:36rpx;width:55%;"></view>
+        <view class="skeleton" style="height:26rpx;width:80%;margin-top:24rpx;"></view>
+        <view class="skeleton" style="height:26rpx;width:40%;margin-top:16rpx;"></view>
+      </view>
+    </block>
+
+    <empty-state wx:elif="{{error}}" icon="alert" title="加载失败" desc="{{error}}" action-text="重试" bind:action="load" />
+
+    <empty-state wx:elif="{{!list.length}}" icon="orders" title="{{tab === 'ALL' ? '还没有订单' : '这里还没有订单'}}" desc="{{tab === 'ALL' ? '预约后可以在这里查看进度、付款和售后。' : '换个分类看看。'}}" action-text="{{tab === 'ALL' ? '预约陪护' : ''}}" bind:action="book" />
+
+    <block wx:else>
+    <view wx:for="{{list}}" wx:key="id" class="card order fade-in" hover-class="order-hover" data-id="{{item.id}}" bindtap="open">
+      <view class="o-top">
+        <view class="o-title ellipsis">{{item.location.hospitalName}}</view>
+        <text class="tag tag-{{item.tone}}">{{item.statusLabel}}</text>
+      </view>
+      <view class="footnote tertiary ellipsis" style="margin-top:6rpx;">{{item.place}}</view>
+
+      <view class="o-rows">
+        <view class="o-row"><icon name="user" size="30" color="#86868B" stroke="1.8" /><text>{{item.patient.name}} · {{item.pkg.name}}</text></view>
+        <view class="o-row"><icon name="clock" size="30" color="#86868B" stroke="1.8" /><text class="num">{{item.range}}</text></view>
+      </view>
+
+      <view wx:if="{{item.deadline}}" class="notice notice-accent" style="margin:24rpx 0 0;">请在 {{item.deadline}} 前完成支付，逾期将释放人员预留</view>
+
+      <view class="o-foot">
+        <view class="price" style="font-size:38rpx;"><text class="cur">¥</text>{{item.total}}</view>
+        <view class="o-actions">
+          <view wx:if="{{item.canPay}}" class="btn btn-primary btn-sm" hover-class="pressed" data-id="{{item.id}}" catchtap="pay">去支付</view>
+          <view wx:else class="btn btn-secondary btn-sm" hover-class="pressed">查看详情</view>
+        </view>
+      </view>
+    </view>
+    </block>
+  </view>
+</view>

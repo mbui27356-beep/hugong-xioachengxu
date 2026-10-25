@@ -1,0 +1,45 @@
+<nav-bar title="预约已提交" scrolled="{{true}}" solid="{{false}}" />
+
+<view class="page" wx:if="{{order}}">
+  <view class="hero">
+    <view class="mark"><icon name="check" size="72" color="#FFFFFF" stroke="2.6" /></view>
+    <view class="title-2" style="margin-top:40rpx;">预约已提交</view>
+    <view class="lead">我们会在 {{confirmMinutes}} 分钟内联系 {{order.contact.name}} 核实需求。确认可以安排后，你会收到付款通知。</view>
+  </view>
+
+  <view class="group">
+    <view class="cell">
+      <view class="cell-main cell-title">预约编号</view>
+      <view class="cell-value num" style="color:var(--label);">{{order.orderNo}}</view>
+      <view class="copy" hover-class="copy-hover" bindtap="copy" aria-label="复制"><icon name="copy" size="30" color="#6E6E73" stroke="1.8" /></view>
+    </view>
+    <view class="cell">
+      <view class="cell-main cell-title">当前状态</view>
+      <text class="tag tag-warning">待确认</text>
+    </view>
+    <view class="cell">
+      <view class="cell-main cell-title">就诊人</view>
+      <view class="cell-value">{{order.patient.name}}</view>
+    </view>
+    <view class="cell">
+      <view class="cell-main cell-title">到岗时间</view>
+      <view class="cell-value num">{{startLabel}}</view>
+    </view>
+  </view>
+
+  <view class="group-label">接下来</view>
+  <view class="card next">
+    <view wx:for="{{steps}}" wx:key="t" class="n-row">
+      <view class="n-dot {{index === 0 ? 'n-on' : ''}}"></view>
+      <view class="n-main">
+        <view class="subhead" style="font-weight:{{index === 0 ? 600 : 400}};">{{item.t}}</view>
+        <view class="footnote tertiary">{{item.d}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="actions">
+    <view class="btn btn-primary btn-block" hover-class="pressed" bindtap="viewOrder">查看订单</view>
+    <view class="btn btn-secondary btn-block" hover-class="pressed" bindtap="home">完成</view>
+  </view>
+</view>

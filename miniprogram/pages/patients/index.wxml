@@ -1,0 +1,41 @@
+<nav-bar title="就诊人" scrolled="{{scrolled}}" />
+
+<view class="page">
+  <view class="page-head">
+    <view class="large-title">就诊人</view>
+    <view class="lead">{{selectMode ? '选择本次接受陪护的人。' : '管理常用就诊人与联系人。'}}</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="group">
+    <view wx:for="{{[1,2]}}" wx:key="*this" class="cell"><view class="skeleton" style="height:40rpx;width:60%;"></view></view>
+  </view>
+
+  <empty-state wx:elif="{{error}}" icon="alert" title="加载失败" desc="{{error}}" action-text="重试" bind:action="load" />
+
+  <block wx:else>
+    <empty-state wx:if="{{!list.length}}" icon="users" title="还没有就诊人" desc="添加后，下次预约可直接选择。" />
+    <view wx:else class="group fade-in">
+      <view wx:for="{{list}}" wx:key="id" class="cell indent" hover-class="cell-hover" data-id="{{item.id}}" bindtap="onTap">
+        <view wx:if="{{selectMode}}" class="radio {{selectedId === item.id ? 'radio-on' : ''}}"><icon wx:if="{{selectedId === item.id}}" name="check" size="28" color="#FFFFFF" stroke="3" /></view>
+        <view wx:else class="avatar">{{item.initial}}</view>
+        <view class="cell-main">
+          <view class="cell-title">
+            <text style="font-weight:600;">{{item.name}}</text>
+            <text wx:if="{{item.isDefault}}" class="tag tag-neutral" style="margin-left:12rpx;">默认</text>
+          </view>
+          <view class="cell-sub">{{item.meta}}</view>
+          <view class="cell-sub">联系人 {{item.contactName}}（{{item.contactRelation}}）· {{item.phone}}</view>
+        </view>
+        <view class="edit" hover-class="edit-hover" hover-stop-propagation data-id="{{item.id}}" catchtap="edit" aria-label="编辑"><icon name="edit" size="34" color="#6E6E73" stroke="1.8" /></view>
+      </view>
+    </view>
+
+    <view class="group" style="margin-top:20rpx;">
+      <view class="cell" hover-class="cell-hover" bindtap="add">
+        <view class="cell-icon" style="background:var(--accent-soft);"><icon name="plus" size="32" color="#0071E3" stroke="2.2" /></view>
+        <view class="cell-main cell-title accent">添加就诊人</view>
+      </view>
+    </view>
+    <view class="group-footer">档案仅当前账号可见，不会按姓名或手机号与他人共享。修改档案不影响已提交的订单。</view>
+  </block>
+</view>

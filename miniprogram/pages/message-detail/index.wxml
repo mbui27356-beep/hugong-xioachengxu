@@ -1,0 +1,21 @@
+<nav-bar title="消息" scrolled="{{true}}" />
+
+<view class="page">
+  <empty-state wx:if="{{error}}" icon="alert" title="消息不可用" desc="{{error}}" action-text="返回" bind:action="back" />
+  <view wx:elif="{{m}}" class="fade-in">
+    <view class="page-head">
+      <view class="footnote tertiary">{{m.type === 'ORDER' ? '订单通知' : '系统通知'}} · {{when}}</view>
+      <view class="title-2" style="margin-top:12rpx;">{{m.title}}</view>
+    </view>
+    <view class="card">
+      <view class="body">{{m.body}}</view>
+    </view>
+    <view wx:if="{{m.orderId}}" class="group" style="margin-top:20rpx;">
+      <view class="cell" hover-class="cell-hover" bindtap="openOrder">
+        <view class="cell-icon"><icon name="orders" size="34" stroke="1.8" /></view>
+        <view class="cell-main cell-title">查看关联订单</view>
+        <icon name="chevron-right" size="30" color="#C7C7CC" stroke="2.2" />
+      </view>
+    </view>
+  </view>
+</view>

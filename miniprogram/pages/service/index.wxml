@@ -1,0 +1,94 @@
+<nav-bar title="服务安排" scrolled="{{scrolled}}" />
+
+<view class="page page-bar">
+  <view class="page-head">
+    <view class="eyebrow footnote">第 3 步，共 4 步</view>
+    <view class="title-2">服务安排</view>
+    <view class="lead">{{locationLabel}}</view>
+  </view>
+
+  <!-- 套餐 -->
+  <view class="section-header"><view class="h">选择套餐</view></view>
+  <block wx:if="{{loading}}">
+    <view wx:for="{{[1,2]}}" wx:key="*this" class="card"><view class="skeleton" style="height:44rpx;width:50%;"></view><view class="skeleton" style="height:28rpx;margin-top:20rpx;"></view></view>
+  </block>
+  <empty-state wx:elif="{{error}}" icon="alert" title="暂时无法加载套餐" desc="{{error}}" action-text="重试" bind:action="load" />
+  <empty-state wx:elif="{{!offerings.length}}" icon="inbox" title="该地点暂无可选套餐" desc="请联系客服确认，或返回选择其他科室。" />
+  <view wx:else>
+    <view wx:for="{{offerings}}" wx:key="id" class="card pkg {{offeringId === item.id ? 'pkg-on' : ''}}" data-id="{{item.id}}" bindtap="pickOffering" aria-role="radio" aria-checked="{{offeringId === item.id}}">
+      <view class="pkg-top">
+        <view class="pkg-title">
+          <view class="headline">{{item.pkg.name}}</view>
+          <view class="pkg-tags">
+            <text class="tag tag-neutral">{{item.pkg.type === 'ONE_TO_ONE' ? '一对一' : '一对多'}}</text>
+            <text class="tag tag-neutral">{{item.pkg.unitHours}} 小时 / {{item.pkg.unitLabel}}</text>
+          </view>
+        </view>
+        <view class="pkg-price price">
+          <text class="cur">¥</text>{{item.priceInt}}<text class="dec">.{{item.priceDec}}</text>
+          <view class="per">/ {{item.pkg.unitLabel}}</view>
+        </view>
+      </view>
+      <view class="subhead secondary pkg-summary">{{item.pkg.summary}}</view>
+      <view class="pkg-list">
+        <view wx:for="{{item.pkg.content}}" wx:key="*this" wx:for-item="c" class="pkg-li">
+          <icon name="check" size="28" color="#1F9D55" stroke="2.4" />
+          <text>{{c}}</text>
+        </view>
+      </view>
+      <view class="pkg-ex footnote tertiary">不包含：{{item.exText}}</view>
+      <view class="radio pkg-radio {{offeringId === item.id ? 'radio-on' : ''}}"><icon wx:if="{{offeringId === item.id}}" name="check" size="28" color="#FFFFFF" stroke="3" /></view>
+    </view>
+    <view class="group-footer">演示价格，不代表正式定价。复杂情况由客服人工确认，不会在付款时悄悄加价。</view>
+  </view>
+
+  <!-- 时间 -->
+  <view class="section-header"><view class="h">服务时间</view></view>
+  <view class="group">
+    <picker mode="multiSelector" range="{{columns}}" value="{{pickerValue}}" bindchange="onPick" bindcolumnchange="onColumn">
+      <view class="cell" hover-class="cell-hover">
+        <view class="cell-icon"><icon name="calendar" size="34" stroke="1.8" /></view>
+        <view class="cell-main cell-title">到岗时间</view>
+        <view class="cell-value {{startError ? 'danger' : ''}}" style="color:{{startError ? '' : 'var(--label)'}};">{{startLabel}}</view>
+        <icon name="chevron-right" size="30" color="#C7C7CC" stroke="2.2" />
+      </view>
+    </picker>
+    <view class="cell">
+      <view class="cell-icon"><icon name="clock" size="34" stroke="1.8" /></view>
+      <view class="cell-main cell-title">服务时长</view>
+      <view class="stepper">
+        <view class="step-btn {{units <= 1 ? 'step-off' : ''}}" hover-class="step-hover" bindtap="dec" aria-label="减少"><icon name="minus" size="30" stroke="2.2" /></view>
+        <view class="step-val num">{{units}} <text class="footnote secondary">{{unitLabel}}</text></view>
+        <view class="step-btn {{units >= maxUnits ? 'step-off' : ''}}" hover-class="step-hover" bindtap="inc" aria-label="增加"><icon name="plus" size="30" stroke="2.2" /></view>
+      </view>
+    </view>
+    <view class="cell">
+      <view class="cell-icon"><icon name="refresh" size="34" stroke="1.8" /></view>
+      <view class="cell-main cell-title">预计结束</view>
+      <view class="cell-value">{{endLabel}}</view>
+    </view>
+  </view>
+  <view class="group-footer {{startError ? 'danger' : ''}}">{{startError || startHint}}</view>
+
+  <!-- 评估 -->
+  <view class="section-header"><view class="h">照护需求评估</view><view class="aside num">{{answered}}/{{items.length}}</view></view>
+  <view class="card assess">
+    <view wx:for="{{items}}" wx:key="key" class="as-row">
+      <view class="as-label">{{item.label}}</view>
+      <view class="segmented as-seg">
+        <view wx:for="{{options}}" wx:key="value" wx:for-item="opt" class="seg {{assessment[item.key] === opt.value ? 'seg-on' : ''}}" data-key="{{item.key}}" data-value="{{opt.value}}" bindtap="answer">{{opt.label}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="group-footer">评估仅用于安排合适的护工，不作为医学诊断，也不会自动决定护理等级。</view>
+</view>
+
+<view class="bottom-bar">
+  <view class="sum">
+    <view class="sum-label">预估费用 · 以下一步核算为准</view>
+    <view class="price" style="font-size:44rpx;">
+      <text class="cur">¥</text>{{estInt}}<text class="dec">.{{estDec}}</text>
+    </view>
+  </view>
+  <view class="btn btn-primary {{canNext ? '' : 'btn-disabled'}}" hover-class="{{canNext ? 'pressed' : 'none'}}" bindtap="next">{{submitting ? '核算中…' : '下一步'}}</view>
+</view>

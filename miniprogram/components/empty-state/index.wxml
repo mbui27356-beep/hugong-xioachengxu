@@ -1,0 +1,6 @@
+<view class="empty fade-in">
+  <view class="badge"><icon name="{{icon}}" size="56" color="#86868B" stroke="1.5" /></view>
+  <view class="title">{{title}}</view>
+  <view wx:if="{{desc}}" class="desc">{{desc}}</view>
+  <view wx:if="{{actionText}}" class="btn btn-secondary btn-sm action" hover-class="pressed" bindtap="onAction">{{actionText}}</view>
+</view>

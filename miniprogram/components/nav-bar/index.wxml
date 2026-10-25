@@ -1,0 +1,12 @@
+<view class="nav {{solid || scrolled ? 'nav-glass' : ''}}" style="padding-top:{{statusBar}}px;">
+  <view class="bar" style="height:{{navHeight}}px;padding-right:{{capsuleWidth}}px;">
+    <view class="side" style="width:{{capsuleWidth - 8}}px;">
+      <view wx:if="{{back}}" class="back" hover-class="back-hover" bindtap="onBack" aria-role="button" aria-label="返回">
+        <icon name="chevron-left" size="44" stroke="2.2" />
+      </view>
+      <slot wx:else name="left"></slot>
+    </view>
+    <view class="title {{scrolled || alwaysTitle ? 'title-on' : ''}}">{{title}}</view>
+  </view>
+</view>
+<view style="height:{{statusBar + navHeight}}px;"></view>

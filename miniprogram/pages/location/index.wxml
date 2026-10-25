@@ -1,0 +1,70 @@
+<nav-bar title="{{hospital.name || '选择科室'}}" scrolled="{{scrolled}}" />
+
+<view class="page page-bar">
+  <block wx:if="{{loading}}">
+    <view class="page-head">
+      <view class="skeleton" style="width:70%;height:60rpx;"></view>
+      <view class="skeleton" style="width:40%;height:28rpx;margin-top:20rpx;"></view>
+    </view>
+    <view class="card"><view wx:for="{{[1,2,3,4]}}" wx:key="*this" class="skeleton" style="height:40rpx;margin:24rpx 0;"></view></view>
+  </block>
+
+  <empty-state wx:elif="{{error}}" icon="alert" title="暂时无法加载" desc="{{error}}" action-text="重试" bind:action="load" />
+
+  <block wx:else>
+    <view class="page-head">
+      <view class="eyebrow footnote">第 1 步，共 4 步</view>
+      <view class="title-2">{{hospital.name}}</view>
+      <view class="head-meta">
+        <text class="tag tag-neutral">{{hospital.gradeName}}</text>
+        <text class="footnote tertiary">{{hospital.displayAddress}}</text>
+        <text class="link footnote" bindtap="switchHospital">切换医院</text>
+      </view>
+    </view>
+
+    <view class="group-label">院区</view>
+    <view wx:if="{{campuses.length > 1}}" class="campus-row">
+      <view class="segmented">
+        <view wx:for="{{campuses}}" wx:key="id" class="seg {{campusIndex === index ? 'seg-on' : ''}}" data-index="{{index}}" bindtap="pickCampus">{{item.name}}</view>
+      </view>
+    </view>
+    <view class="group">
+      <view class="cell">
+        <view class="cell-icon"><icon name="pin" size="34" stroke="1.8" /></view>
+        <view class="cell-main">
+          <view class="cell-title">{{campus.name}}</view>
+          <view class="cell-sub">{{campus.address}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="group-label">科室</view>
+    <view wx:if="{{!campus.departments.length}}" class="group"><view class="cell"><view class="cell-main tertiary">该院区暂无可预约科室</view></view></view>
+    <view wx:else class="group">
+      <block wx:for="{{campus.departments}}" wx:key="id" wx:for-item="dept">
+        <view class="cell" hover-class="cell-hover" data-id="{{dept.id}}" bindtap="pickDept">
+          <view class="cell-main">
+            <view class="cell-title {{deptId === dept.id ? 'picked' : ''}}">{{dept.name}}</view>
+            <view wx:if="{{dept.wards.length}}" class="cell-sub">{{dept.wards.length}} 个病区</view>
+          </view>
+          <icon wx:if="{{deptId === dept.id}}" name="check" size="36" color="#0071E3" stroke="2.4" />
+        </view>
+        <view wx:if="{{deptId === dept.id && dept.wards.length}}" class="wards fade-in">
+          <view class="footnote secondary" style="margin-bottom:16rpx;">选择病区</view>
+          <view class="ward-list">
+            <view wx:for="{{dept.wards}}" wx:key="id" wx:for-item="w" class="ward {{wardId === w.id ? 'ward-on' : ''}}" data-id="{{w.id}}" catchtap="pickWard">{{w.name}}</view>
+          </view>
+        </view>
+      </block>
+    </view>
+    <view class="group-footer">没有找到所在科室？请联系客服确认是否可以服务。</view>
+  </block>
+</view>
+
+<view wx:if="{{!loading && !error}}" class="bottom-bar">
+  <view class="sum">
+    <view class="sum-label">服务地点</view>
+    <view class="subhead ellipsis" style="font-weight:600;">{{summary || '请选择科室'}}</view>
+  </view>
+  <view class="btn btn-primary {{ready ? '' : 'btn-disabled'}}" hover-class="{{ready ? 'pressed' : 'none'}}" bindtap="next">下一步</view>
+</view>

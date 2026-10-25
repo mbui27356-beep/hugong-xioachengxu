@@ -1,0 +1,122 @@
+<nav-bar title="核对预约" scrolled="{{scrolled}}" />
+
+<view class="page page-bar" wx:if="{{quote}}">
+  <view class="page-head">
+    <view class="eyebrow footnote">第 4 步，共 4 步</view>
+    <view class="title-2">核对预约</view>
+    <view class="lead">提交后我们会联系你核实需求，确认可安排人员后才开放付款。</view>
+  </view>
+
+  <view class="group-label">服务地点</view>
+  <view class="group">
+    <view class="cell">
+      <view class="cell-icon"><icon name="hospital" size="34" stroke="1.8" /></view>
+      <view class="cell-main">
+        <view class="cell-title" style="font-weight:600;">{{quote.location.hospitalName}}</view>
+        <view class="cell-sub">{{locationLine}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="group-label">就诊人</view>
+  <view class="group">
+    <view wx:if="{{patient}}" class="cell" hover-class="cell-hover" bindtap="pickPatient">
+      <view class="cell-icon"><icon name="user" size="34" stroke="1.8" /></view>
+      <view class="cell-main">
+        <view class="cell-title"><text style="font-weight:600;">{{patient.name}}</text><text class="secondary">  {{patientMeta}}</text></view>
+        <view class="cell-sub">联系人 {{patient.contactName}}（{{patient.contactRelation}}）· {{contactPhone}}</view>
+      </view>
+      <view class="link footnote">更换</view>
+    </view>
+    <view wx:else class="cell" hover-class="cell-hover" bindtap="pickPatient">
+      <view class="cell-icon" style="background:var(--accent-soft);"><icon name="plus" size="32" color="#0071E3" stroke="2.2" /></view>
+      <view class="cell-main cell-title accent">选择或添加就诊人</view>
+      <icon name="chevron-right" size="30" color="#C7C7CC" stroke="2.2" />
+    </view>
+  </view>
+
+  <view wx:if="{{isProxy}}" class="group" style="margin-top:20rpx;">
+    <view class="cell" bindtap="toggleProxy" aria-role="checkbox" aria-checked="{{proxyConsent}}">
+      <view class="checkbox {{proxyConsent ? 'checkbox-on' : ''}}"><icon wx:if="{{proxyConsent}}" name="check" size="30" color="#FFFFFF" stroke="2.8" /></view>
+      <view class="cell-main subhead">我是{{patient.name}}的{{patient.contactRelation}}，已取得其本人或监护人同意代为预约</view>
+    </view>
+  </view>
+
+  <view class="group-label">病房与床号</view>
+  <view class="group">
+    <view class="field {{bed.unsure ? 'field-off' : ''}}">
+      <view class="field-label">病房</view>
+      <input class="field-input" placeholder="例如 1206" placeholder-class="placeholder" value="{{bed.room}}" disabled="{{bed.unsure}}" maxlength="10" data-key="room" bindinput="onBed" />
+    </view>
+    <view class="field {{bed.unsure ? 'field-off' : ''}}">
+      <view class="field-label">床号</view>
+      <input class="field-input" placeholder="例如 3" placeholder-class="placeholder" value="{{bed.bedNo}}" disabled="{{bed.unsure}}" maxlength="6" data-key="bedNo" bindinput="onBed" />
+    </view>
+    <view class="field">
+      <view class="field-label" style="flex:1;">暂不确定</view>
+      <switch checked="{{bed.unsure}}" color="#34C759" bindchange="onUnsure" />
+    </view>
+  </view>
+  <view class="group-footer">暂不确定时可先提交，客服核实时会向你确认，到岗前需补齐。</view>
+
+  <view class="group-label">服务内容</view>
+  <view class="group">
+    <view class="cell">
+      <view class="cell-main cell-title">套餐</view>
+      <view class="cell-value" style="color:var(--label);">{{pkgName}}</view>
+    </view>
+    <view class="cell">
+      <view class="cell-main cell-title">开始</view>
+      <view class="cell-value num">{{startLabel}}</view>
+    </view>
+    <view class="cell">
+      <view class="cell-main cell-title">结束</view>
+      <view class="cell-value num">{{endLabel}}</view>
+    </view>
+    <view class="cell">
+      <view class="cell-main cell-title">时长</view>
+      <view class="cell-value">{{durationLabel}}</view>
+    </view>
+  </view>
+
+  <view class="group-label">费用明细</view>
+  <view class="group">
+    <view wx:for="{{lines}}" wx:key="label" class="cell">
+      <view class="cell-main">
+        <view class="cell-title">{{item.label}}</view>
+        <view class="cell-sub num">{{item.detail}}</view>
+      </view>
+      <view class="cell-value num" style="color:var(--label);">¥{{item.amount}}</view>
+    </view>
+    <view class="cell total">
+      <view class="cell-main headline">合计</view>
+      <view class="price" style="font-size:48rpx;"><text class="cur">¥</text>{{totalInt}}<text class="dec">.{{totalDec}}</text></view>
+    </view>
+  </view>
+  <view class="group-footer">费用由服务端核算，报价有效至 {{expiresLabel}}。付款前不产生任何费用。</view>
+
+  <view class="group-label">取消与退款</view>
+  <view class="card rule">
+    <view class="subhead secondary" style="line-height:46rpx;">{{refundRule}}</view>
+    <view class="link footnote" style="margin-top:16rpx;" bindtap="openAgreement">查看完整取消与退款规则</view>
+  </view>
+
+  <view class="group" style="margin-top:20rpx;">
+    <view class="cell" hover-class="cell-hover" bindtap="call">
+      <view class="cell-icon"><icon name="headset" size="34" stroke="1.8" /></view>
+      <view class="cell-main">
+        <view class="cell-title">咨询客服</view>
+        <view class="cell-sub">{{providerName}}</view>
+      </view>
+      <view class="cell-value num">{{servicePhoneLabel}}</view>
+    </view>
+  </view>
+</view>
+
+<view wx:if="{{quote}}" class="bottom-bar">
+  <view class="sum">
+    <view class="sum-label">合计</view>
+    <view class="price" style="font-size:44rpx;"><text class="cur">¥</text>{{totalInt}}<text class="dec">.{{totalDec}}</text></view>
+  </view>
+  <view class="btn btn-primary {{submitting ? 'btn-disabled' : ''}}" hover-class="pressed" bindtap="submit">{{submitting ? '正在提交…' : '提交预约'}}</view>
+</view>

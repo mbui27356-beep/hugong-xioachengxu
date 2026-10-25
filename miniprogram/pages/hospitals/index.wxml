@@ -1,0 +1,84 @@
+<nav-bar title="预约陪护" back="{{false}}" scrolled="{{scrolled}}">
+  <view slot="left" class="nav-btn" hover-class="nav-btn-hover" bindtap="openHelp" aria-role="button" aria-label="协议与帮助">
+    <icon name="more" size="44" stroke="1.7" />
+  </view>
+</nav-bar>
+
+<view class="page page-tab">
+  <view class="page-head">
+    <view class="demo-ribbon">演示环境</view>
+    <view class="large-title" style="margin-top:12rpx;">预约陪护</view>
+    <view class="lead">选择医院与科室，我们核实需求后安排护工到床旁照护。</view>
+  </view>
+
+  <view class="search">
+    <icon name="search" size="34" color="#86868B" stroke="2" />
+    <input class="search-input" placeholder="搜索医院或区县" placeholder-class="placeholder" value="{{keyword}}" confirm-type="search" bindinput="onInput" bindconfirm="onSearch" />
+    <view wx:if="{{keyword}}" class="search-clear" bindtap="clearKeyword" aria-label="清除"><icon name="close" size="24" color="#fff" stroke="2.6" /></view>
+  </view>
+
+  <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="chips-scroll">
+    <view class="chips">
+      <view class="chip {{cityId === '' ? 'chip-on' : ''}}" data-id="" bindtap="pickCity">全部城市</view>
+      <view wx:for="{{cities}}" wx:key="id" class="chip {{cityId === item.id ? 'chip-on' : ''}}" data-id="{{item.id}}" bindtap="pickCity">{{item.name}}</view>
+    </view>
+  </scroll-view>
+
+  <view class="grade-row">
+    <view class="segmented">
+      <view class="seg {{gradeId === '' ? 'seg-on' : ''}}" data-id="" bindtap="pickGrade">全部等级</view>
+      <view wx:for="{{grades}}" wx:key="id" class="seg {{gradeId === item.id ? 'seg-on' : ''}}" data-id="{{item.id}}" bindtap="pickGrade">{{item.shortName}}</view>
+    </view>
+  </view>
+
+  <view class="section-header">
+    <view class="h">医院</view>
+    <view wx:if="{{filtered}}" class="link" bindtap="clearAll">清空条件</view>
+    <view wx:elif="{{!loading && !error}}" class="aside num">{{items.length}}{{nextCursor ? '+' : ''}} 家</view>
+  </view>
+
+  <block wx:if="{{loading && !items.length}}">
+    <view wx:for="{{[1,2,3]}}" wx:key="*this" class="card h-card">
+      <view class="skeleton" style="width:88rpx;height:88rpx;border-radius:24rpx;"></view>
+      <view style="flex:1;">
+        <view class="skeleton" style="width:60%;height:34rpx;"></view>
+        <view class="skeleton" style="width:40%;height:26rpx;margin-top:18rpx;"></view>
+      </view>
+    </view>
+  </block>
+
+  <empty-state wx:elif="{{error}}" icon="alert" title="加载失败" desc="{{error}}" action-text="重试" bind:action="reload" />
+
+  <empty-state wx:elif="{{!items.length}}" icon="search" title="没有找到医院" desc="换个关键词，或清空筛选条件再试。" action-text="清空条件" bind:action="clearAll" />
+
+  <block wx:else>
+    <view wx:for="{{items}}" wx:key="id" class="card h-card fade-in" hover-class="pressed-card" data-index="{{index}}" bindtap="openHospital">
+      <view class="h-mark"><icon name="hospital" size="44" color="#1D1D1F" stroke="1.6" /></view>
+      <view class="h-main">
+        <view class="h-name">{{item.name}}</view>
+        <view class="h-meta">
+          <text class="tag tag-neutral">{{item.gradeName}}</text>
+          <text class="footnote tertiary">{{item.displayAddress}}</text>
+        </view>
+        <view class="h-foot footnote tertiary">{{item.campusCount}} 个院区可预约<text wx:if="{{item.demo}}"> · 演示数据</text></view>
+      </view>
+      <icon name="chevron-right" size="32" color="#C7C7CC" stroke="2.2" />
+    </view>
+    <view class="list-end footnote tertiary">
+      <text wx:if="{{loadingMore}}">正在加载…</text>
+      <text wx:elif="{{!nextCursor}}">已显示全部可预约医院</text>
+    </view>
+  </block>
+
+  <view class="section-header"><view class="h">预约流程</view></view>
+  <view class="card steps">
+    <view wx:for="{{steps}}" wx:key="t" class="step">
+      <view class="step-no num">{{index + 1}}</view>
+      <view class="step-main">
+        <view class="headline" style="font-size:30rpx;">{{item.t}}</view>
+        <view class="footnote tertiary" style="margin-top:4rpx;">{{item.d}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="group-footer">医院不是本服务的提供方。护工提供生活照料，不进行医疗护理操作。</view>
+</view>

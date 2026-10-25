@@ -1,0 +1,18 @@
+{
+  "name": "hugong-backend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/entrypoints/local/server.ts",
+    "start": "tsx src/entrypoints/local/server.ts",
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "tsx tests/e2e.ts",
+    "sync:contracts": "node scripts/sync-contracts.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "~5.9.3"
+  }
+}

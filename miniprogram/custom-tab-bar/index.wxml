@@ -1,0 +1,9 @@
+<view class="tabbar">
+  <view wx:for="{{tabs}}" wx:key="path" class="tab" data-index="{{index}}" bindtap="onTap" aria-role="tab" aria-label="{{item.text}}">
+    <view class="ic">
+      <icon name="{{selected === index ? item.iconOn : item.icon}}" size="48" color="{{selected === index ? '#1D1D1F' : '#AEAEB2'}}" stroke="1.8" />
+      <view wx:if="{{item.badge && badge > 0}}" class="badge num">{{badge > 99 ? '99+' : badge}}</view>
+    </view>
+    <view class="label {{selected === index ? 'on' : ''}}">{{item.text}}</view>
+  </view>
+</view>

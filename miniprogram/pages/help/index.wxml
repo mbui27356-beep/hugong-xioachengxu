@@ -1,0 +1,51 @@
+<nav-bar title="协议与帮助" scrolled="{{scrolled}}" />
+
+<view class="page">
+  <view class="page-head">
+    <view class="large-title">协议与帮助</view>
+  </view>
+
+  <view class="group-label">我的</view>
+  <view class="group">
+    <view class="cell" hover-class="cell-hover" bindtap="openPatients">
+      <view class="cell-icon"><icon name="users" size="34" stroke="1.8" /></view>
+      <view class="cell-main cell-title">就诊人管理</view>
+      <icon name="chevron-right" size="30" color="#C7C7CC" stroke="2.2" />
+    </view>
+  </view>
+
+  <view class="group-label">协议</view>
+  <view class="group">
+    <view wx:for="{{docs}}" wx:key="type" class="cell" hover-class="cell-hover" data-type="{{item.type}}" bindtap="openDoc">
+      <view class="cell-icon"><icon name="{{item.icon}}" size="34" stroke="1.8" /></view>
+      <view class="cell-main cell-title">{{item.title}}</view>
+      <icon name="chevron-right" size="30" color="#C7C7CC" stroke="2.2" />
+    </view>
+  </view>
+
+  <view class="group-label">联系我们</view>
+  <view class="group">
+    <view class="cell" hover-class="cell-hover" bindtap="call">
+      <view class="cell-icon"><icon name="headset" size="34" stroke="1.8" /></view>
+      <view class="cell-main">
+        <view class="cell-title">客服电话</view>
+        <view class="cell-sub">{{providerName}}</view>
+      </view>
+      <view class="cell-value num">{{phoneText}}</view>
+    </view>
+  </view>
+
+  <view class="group-label">演示</view>
+  <view class="group">
+    <view class="cell" hover-class="cell-hover" bindtap="switchUser">
+      <view class="cell-icon"><icon name="user" size="34" stroke="1.8" /></view>
+      <view class="cell-main">
+        <view class="cell-title">演示账号</view>
+        <view class="cell-sub">切换后只能看到该账号自己的就诊人、订单与消息</view>
+      </view>
+      <view class="cell-value">{{nickname}}</view>
+      <icon name="chevron-right" size="30" color="#C7C7CC" stroke="2.2" />
+    </view>
+  </view>
+  <view class="group-footer">当前连接本地演示后端，与管理后台共用同一份数据，仅含虚构就诊人与电话。版本 0.2.0</view>
+</view>

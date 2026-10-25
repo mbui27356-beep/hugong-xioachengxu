@@ -1,0 +1,187 @@
+<nav-bar title="订单详情" scrolled="{{scrolled}}" />
+
+<view class="page page-bar">
+  <block wx:if="{{loading && !o}}">
+    <view class="page-head"><view class="skeleton" style="width:40%;height:56rpx;"></view><view class="skeleton" style="width:80%;height:28rpx;margin-top:20rpx;"></view></view>
+    <view class="card"><view wx:for="{{[1,2,3]}}" wx:key="*this" class="skeleton" style="height:36rpx;margin:20rpx 0;"></view></view>
+  </block>
+
+  <empty-state wx:elif="{{error}}" icon="alert" title="无法查看订单" desc="{{error}}" action-text="返回订单" bind:action="backToList" />
+
+  <block wx:elif="{{o}}">
+    <!-- 状态 -->
+    <view class="page-head">
+      <view class="status-line">
+        <view class="dot dot-{{status.tone}}"></view>
+        <view class="large-title" style="font-size:60rpx;line-height:72rpx;">{{status.label}}</view>
+      </view>
+      <view class="lead">{{hint}}</view>
+    </view>
+
+    <view wx:if="{{progress.length}}" class="card progress">
+      <view class="track">
+        <view class="track-fill" style="width:{{progressPct}}%;"></view>
+      </view>
+      <view class="p-steps">
+        <view wx:for="{{progress}}" wx:key="label" class="p-step {{item.done ? 'p-done' : ''}} {{item.current ? 'p-cur' : ''}}">
+          <view class="p-dot"></view>
+          <view class="p-label">{{item.label}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{deadline}}" class="notice notice-accent" style="margin-top:20rpx;">
+      <icon name="clock" size="32" color="#0058B0" stroke="1.8" />
+      <view>请在 {{deadline}} 前完成支付。支付结果以服务端确认为准。</view>
+    </view>
+
+    <!-- 服务安排 -->
+    <view class="group-label">服务安排</view>
+    <view class="group">
+      <view wx:if="{{o.caregiver}}" class="cell">
+        <view class="avatar">{{caregiverInitial}}</view>
+        <view class="cell-main">
+          <view class="cell-title" style="font-weight:600;">{{o.caregiver.name}}</view>
+          <view class="cell-sub">护工 · {{o.pkg.type === 'ONE_TO_ONE' ? '一对一' : '一对多'}}</view>
+        </view>
+        <view wx:if="{{o.caregiver.phone}}" class="round-btn" hover-class="pressed" bindtap="callCaregiver" aria-label="致电护工"><icon name="phone" size="34" color="#1F9D55" stroke="1.9" /></view>
+      </view>
+      <view wx:else class="cell">
+        <view class="cell-icon"><icon name="users" size="34" stroke="1.8" /></view>
+        <view class="cell-main">
+          <view class="cell-title">尚未安排护工</view>
+          <view class="cell-sub">{{o.businessStatus === 'PENDING_CONFIRM' ? '核实需求后预留人员' : '支付后为你确定具体护工'}}</view>
+        </view>
+      </view>
+      <view class="cell">
+        <view class="cell-icon"><icon name="hospital" size="34" stroke="1.8" /></view>
+        <view class="cell-main">
+          <view class="cell-title">{{o.location.hospitalName}}</view>
+          <view class="cell-sub">{{place}}</view>
+        </view>
+      </view>
+      <view class="cell">
+        <view class="cell-icon"><icon name="bed" size="34" stroke="1.8" /></view>
+        <view class="cell-main cell-title">病房床号</view>
+        <view class="cell-value">{{bedLabel}}</view>
+      </view>
+      <view class="cell">
+        <view class="cell-icon"><icon name="calendar" size="34" stroke="1.8" /></view>
+        <view class="cell-main">
+          <view class="cell-title num">{{startLabel}}</view>
+          <view class="cell-sub num">至 {{endLabel}} · {{duration}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 就诊人 -->
+    <view class="group-label">就诊人与联系人</view>
+    <view class="group">
+      <view class="cell">
+        <view class="cell-main cell-title">就诊人</view>
+        <view class="cell-value">{{o.patient.name}} {{patientMeta}}</view>
+      </view>
+      <view class="cell">
+        <view class="cell-main cell-title">联系人</view>
+        <view class="cell-value">{{o.contact.name}}（{{o.contact.relationship}}）</view>
+      </view>
+      <view class="cell">
+        <view class="cell-main cell-title">联系电话</view>
+        <view class="cell-value num">{{contactPhone}}</view>
+      </view>
+    </view>
+
+    <!-- 服务内容 -->
+    <view class="group-label">服务内容</view>
+    <view class="card">
+      <view class="headline">{{o.pkg.name}}</view>
+      <view class="pk-list">
+        <view wx:for="{{o.pkg.content}}" wx:key="*this" class="pk-li"><icon name="check" size="28" color="#1F9D55" stroke="2.4" /><text>{{item}}</text></view>
+      </view>
+      <view class="footnote tertiary pk-ex">不包含：{{exText}}</view>
+    </view>
+
+    <!-- 费用 -->
+    <view class="group-label">费用</view>
+    <view class="group">
+      <view wx:for="{{lines}}" wx:key="label" class="cell">
+        <view class="cell-main">
+          <view class="cell-title">{{item.label}}</view>
+          <view class="cell-sub num">{{item.detail}}</view>
+        </view>
+        <view class="cell-value num" style="color:var(--label);">¥{{item.amount}}</view>
+      </view>
+      <view class="cell">
+        <view class="cell-main headline">合计</view>
+        <view class="price" style="font-size:44rpx;"><text class="cur">¥</text>{{total}}</view>
+      </view>
+      <view class="cell">
+        <view class="cell-main cell-title">支付状态</view>
+        <view class="cell-value">{{paymentLabel}}</view>
+      </view>
+      <view wx:for="{{paidRecords}}" wx:key="outTradeNo" class="cell">
+        <view class="cell-main">
+          <view class="cell-title">微信支付</view>
+          <view class="cell-sub num">{{item.time}} · {{item.outTradeNo}}</view>
+        </view>
+        <view class="cell-value num">¥{{item.amount}}</view>
+      </view>
+      <view wx:for="{{refundRecords}}" wx:key="outRefundNo" class="cell">
+        <view class="cell-main">
+          <view class="cell-title">售后申请</view>
+          <view class="cell-sub">{{item.reason}} · {{item.time}}</view>
+        </view>
+        <text class="tag tag-{{item.tone}}">{{item.label}}</text>
+      </view>
+    </view>
+    <view wx:if="{{refundRecords.length}}" class="group-footer">退款金额由客服按公示规则核定，原路退回，到账后状态才会显示成功。</view>
+
+    <!-- 动态 -->
+    <view class="group-label">订单动态</view>
+    <view class="card timeline">
+      <view wx:for="{{events}}" wx:key="at" class="t-row {{index === 0 ? 't-first' : ''}}">
+        <view class="t-dot"></view>
+        <view class="t-main">
+          <view class="subhead" style="font-weight:{{index === 0 ? 600 : 400}};">{{item.title}}</view>
+          <view wx:if="{{item.detail}}" class="footnote secondary">{{item.detail}}</view>
+          <view class="caption tertiary num" style="margin-top:4rpx;font-weight:400;">{{item.time}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 订单信息 -->
+    <view class="group-label">订单信息</view>
+    <view class="group">
+      <view class="cell" hover-class="cell-hover" bindtap="copyNo">
+        <view class="cell-main cell-title">订单编号</view>
+        <view class="cell-value num">{{o.orderNo}}</view>
+        <icon name="copy" size="30" color="#AEAEB2" stroke="1.8" />
+      </view>
+      <view class="cell">
+        <view class="cell-main cell-title">提交时间</view>
+        <view class="cell-value num">{{createdLabel}}</view>
+      </view>
+      <view class="cell" hover-class="cell-hover" bindtap="openAgreement">
+        <view class="cell-main cell-title">已确认的服务说明</view>
+        <view class="cell-value">第 {{consentVersion}} 版</view>
+        <icon name="chevron-right" size="30" color="#C7C7CC" stroke="2.2" />
+      </view>
+      <view class="cell" hover-class="cell-hover" bindtap="callService">
+        <view class="cell-main cell-title">联系客服</view>
+        <view class="cell-value num">{{servicePhoneLabel}}</view>
+        <icon name="chevron-right" size="30" color="#C7C7CC" stroke="2.2" />
+      </view>
+    </view>
+
+  </block>
+</view>
+
+<view wx:if="{{o && (actions.pay || actions.cancel || actions.refund || actions.rebook)}}" class="bottom-bar">
+  <view wx:if="{{actions.cancel}}" class="btn btn-secondary" style="min-width:200rpx;" hover-class="pressed" bindtap="cancel">取消预约</view>
+  <view wx:if="{{actions.refund}}" class="btn btn-secondary" style="min-width:200rpx;" hover-class="pressed" bindtap="refund">申请售后</view>
+  <view wx:if="{{actions.pay}}" class="btn btn-primary" style="flex:1;" hover-class="pressed" bindtap="pay">
+    <icon name="wechat" size="36" color="#FFFFFF" stroke="1.8" /><text>{{paying ? '正在确认…' : '支付 ¥' + total}}</text>
+  </view>
+  <view wx:elif="{{actions.rebook}}" class="btn btn-primary" style="flex:1;" hover-class="pressed" bindtap="rebook">再次预约</view>
+  <view wx:elif="{{actions.cancel || actions.refund}}" class="btn btn-primary" style="flex:1;" hover-class="pressed" bindtap="callService">联系客服</view>
+</view>

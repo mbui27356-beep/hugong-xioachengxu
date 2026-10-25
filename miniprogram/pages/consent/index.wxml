@@ -1,0 +1,51 @@
+<nav-bar title="服务知情说明" scrolled="{{scrolled}}" />
+
+<view class="page page-bar">
+  <view wx:if="{{loading}}" class="card" style="margin-top:24rpx;">
+    <view wx:for="{{[1,2,3,4,5,6]}}" wx:key="*this" class="skeleton" style="height:32rpx;margin:24rpx 0;width:{{index % 2 ? 80 : 100}}%;"></view>
+  </view>
+
+  <empty-state wx:elif="{{error}}" icon="alert" title="暂时无法加载说明" desc="{{error}}" action-text="重试" bind:action="load" />
+
+  <block wx:else>
+    <view class="page-head">
+      <view class="eyebrow footnote">第 2 步，共 4 步</view>
+      <view class="title-2">{{service.title}}</view>
+      <view class="lead">预约前请完整阅读。我们会记录你确认的版本与时间。</view>
+      <view class="footnote tertiary" style="margin-top:12rpx;">第 {{service.version}} 版 · {{publishedLabel}} 发布</view>
+    </view>
+
+    <view class="card doc">
+      <view wx:for="{{service.sections}}" wx:key="heading" class="doc-sec">
+        <view wx:if="{{item.heading}}" class="doc-h">{{item.heading}}</view>
+        <view class="doc-p">{{item.body}}</view>
+      </view>
+    </view>
+
+    <view class="group-label">相关告知</view>
+    <view class="group">
+      <view wx:for="{{others}}" wx:key="id" class="cell" hover-class="cell-hover" data-type="{{item.type}}" bindtap="openDoc">
+        <view class="cell-icon"><icon name="{{item.type === 'PRIVACY' ? 'lock' : 'wallet'}}" size="34" stroke="1.8" /></view>
+        <view class="cell-main">
+          <view class="cell-title">{{item.title}}</view>
+          <view class="cell-sub">{{item.summary}}</view>
+        </view>
+        <icon name="chevron-right" size="30" color="#C7C7CC" stroke="2.2" />
+      </view>
+    </view>
+
+    <view class="group-label">请逐项确认</view>
+    <view class="group">
+      <view wx:for="{{checks}}" wx:key="id" class="cell" data-index="{{index}}" bindtap="toggle" aria-role="checkbox" aria-checked="{{item.on}}">
+        <view class="checkbox {{item.on ? 'checkbox-on' : ''}}"><icon wx:if="{{item.on}}" name="check" size="30" color="#FFFFFF" stroke="2.8" /></view>
+        <view class="cell-main subhead">{{item.text}}</view>
+      </view>
+    </view>
+    <view class="group-footer">勾选并点击“同意并继续”表示你已阅读上述内容，这不等同于电子签名。</view>
+  </block>
+</view>
+
+<view wx:if="{{!loading && !error}}" class="bottom-bar">
+  <view class="btn btn-secondary" style="min-width:200rpx;" hover-class="pressed" bindtap="decline">不同意</view>
+  <view class="btn btn-primary {{allOn ? '' : 'btn-disabled'}}" hover-class="{{allOn ? 'pressed' : 'none'}}" bindtap="accept">同意并继续</view>
+</view>
